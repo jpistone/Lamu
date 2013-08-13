@@ -35,8 +35,12 @@ define(['marionette', 'handlebars', 'App', 'leaflet', 'util/App.oauth', 'text!te
 				posts = L.geoJson().addTo(this.map);
 				OAuth.ajax({
 					url : App.config.baseurl + 'api/v2/posts/geojson',
-					success: function (data) { 
+					success: function (data) {
+						// If geojson was empty, return
+						if (data.features.length == 0) return;
+
 						posts.addData(data);
+
 						// Center map on post markers
 						//map.fitBounds(posts.getBounds()).setZoom(5);
 						map.panTo(posts.getBounds().getCenter(), { animate: false });
